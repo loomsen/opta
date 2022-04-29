@@ -71,7 +71,7 @@ def destroy(
     try:
         opta_acquire_lock()
         pre_check()
-        logger.warn(
+        logger.warning(
             f"You are destroying your cloud infra state. {fg('magenta')}DO NOT, I REPEAT, DO NOT{attr(0)} do this as "
             "an attempt to debug a weird/errored apply. What you have created is not some ephemeral object that can be "
             "tossed arbitrarily (perhaps some day) and destroying unnecessarily just to reapply typically makes it "
@@ -233,7 +233,7 @@ def _gcp_get_configs(layer: "Layer") -> List[str]:
     try:
         bucket_object = gcs_client.get_bucket(bucket_name)
     except NotFound:
-        logger.warn(
+        logger.warning(
             "Couldn't find the state bucket, must have already been destroyed in a previous destroy run"
         )
         return []
