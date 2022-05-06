@@ -86,6 +86,10 @@ output_providers:
       host: "https://${{data.google_container_cluster.k8s.endpoint}}"
       token: "{k8s_access_token}"
       cluster_ca_certificate: "${{base64decode({module_source}.k8s_ca_data)}}"
+  kubectl:
+    host: "${{{module_source}.k8s_endpoint}}"
+    token: "${{data.aws_eks_cluster_auth.k8s.token}}"
+    cluster_ca_certificate: "${{base64decode({module_source}.k8s_ca_data)}}"
 output_data:
   google_container_cluster:
     k8s:

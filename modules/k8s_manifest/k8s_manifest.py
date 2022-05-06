@@ -17,10 +17,6 @@ class K8smanifestProcessor(ModuleProcessor):
             raise Exception(
                 f"The module {module.name} was expected to be of type k8s-manifest"
             )
-        (
-            module.data["kubeconfig"],
-            module.data["kubecontext"],
-        ) = self.get_k8s_config_context(layer)
         super(K8smanifestProcessor, self).__init__(module, layer)
 
     def process(self, module_idx: int) -> None:
@@ -29,12 +25,3 @@ class K8smanifestProcessor(ModuleProcessor):
             file_path = os.path.join(os.path.dirname(self.layer.path), file_path)
         self.module.data["file_path"] = file_path
         super(K8smanifestProcessor, self).process(module_idx)
-
-    def get_k8s_config_context(self, layer: "Layer") -> Tuple[str, str]:
-        if layer.cloud == "local":
-            return "~/.kube/config", "kind-opta-local-cluster"
-        else:
-            config_file_name = layer.get_kube_config_file_name()
-        with open(config_file_name, "r") as stream:
-            context = (yaml.safe_load(stream))["current-context"]
-        return config_file_name, context
