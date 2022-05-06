@@ -1,14 +1,13 @@
-provider "kubernetes" {
-  config_path    = var.kubeconfig
-  config_context = var.kubecontext
-
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.14.0"
+    }
+  }
 }
 
-resource "kubernetes_manifest" "manifest" {
-  manifest = yamldecode(file(var.file_path))
-  timeouts {
-    update = "5m"
-    create = "5m"
-    delete = "5m"
-  }
+
+resource "kubectl_manifest" "manifest" {
+  yaml_body = yamldecode(file(var.file_path))
 }
